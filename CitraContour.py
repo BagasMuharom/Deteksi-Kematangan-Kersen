@@ -48,11 +48,11 @@ class CitraContour:
 
             crop = self.crop(color, c)
 
-            if self.croppedResize is not (0, 0):
+            if self.croppedResize == (0, 0):
                 crop = cv.resize(crop, self.croppedResize)
 
             if self.classify == True:
-                self.classifyObject(image, crop, c)
+                self.classifyObject(color, crop, c)
             
             self.cropped.append(crop)
 
@@ -76,10 +76,24 @@ class CitraContour:
 
     def classifyObject(self, color, image, contour):
         # Mengetahui lokasi kontur
-        x,y,w,h = cv.boundingRect(c)
+        x,y,w,h = cv.boundingRect(contour)
+
+        test = self.getHistogram(image)
 
         # Melakukan klasifikasi
-        output = self.classifier.predict(image)
+        output = self.classifier.predict(test)
 
         # Menulis hasil klasifikasi
         cv.putText(self.labeled, "#{}".format(output), (int(x) - 10, int(y)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+
+    def getHistogram(self, image):
+        colors = ('r','g','b')
+
+        hist = np.array([])
+
+        for i, color in enumerate(colors):
+            tmp = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+            histr = cv.calcHist([tmp], [i], None, [256], [0, 256])
+            hist = np.concatenate((hist, histr.flatten().astype(int)), axis = None)
+            
+        return hist.astype(int)

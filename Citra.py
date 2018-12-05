@@ -8,34 +8,26 @@ class Citra:
 
     processed = None
 
-    classify = False
-
-    classifier = None
-
     def __init__(self, img):
         self.img = img
         self.processed = img
 
     def toGray(self):
-        self.processed = cv.cvtColor(self.img, cv.COLOR_BGR2GRAY)
+        self.processed = cv.cvtColor(self.processed, cv.COLOR_BGR2GRAY)
 
     def toBinaryInv(self, tr_down, tr_up):
         self.processed = cv.threshold(self.processed, tr_down, tr_up, cv.THRESH_BINARY_INV)[1]
         
     def resize(self, size):
+        self.img = cv.resize(self.img, size)
         self.processed = cv.resize(self.processed, size)
 
     def getContour(self, areaMin, areaMax):
         contour = CitraContour(self.processed, self.img)
         contour.areaMin = areaMin
         contour.areaMax = areaMax
-        contour.classify = self.classify
-        contour.classifier = self.classifier
 
         return contour
-
-    def calcHistogram(self):
-        pass
     
     def getHistogram(self):
         colors = ('r','g','b')
