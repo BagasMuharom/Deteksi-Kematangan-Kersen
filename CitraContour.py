@@ -42,13 +42,15 @@ class CitraContour:
             
             if w*h < self.areaMin or w*h >= self.areaMax:
                 continue
+                
+            hull = cv.convexHull(c)
             
             # Menggambar garis pada gambar yang akan dilabeli
-            cv.drawContours(self.labeled, [c], 0, (0, 255, 0), 3)
+            cv.drawContours(self.labeled, [hull], 0, (0, 255, 0), 3)
 
             crop = self.crop(color, c)
 
-            if self.croppedResize == (0, 0):
+            if self.croppedResize != (0, 0):
                 crop = cv.resize(crop, self.croppedResize)
 
             if self.classify == True:
@@ -60,11 +62,13 @@ class CitraContour:
         # Mengetahui lokasi kontur
         x,y,w,h = cv.boundingRect(c)
 
+        hull = cv.convexHull(c)
+        
         # Membuat gambar kosong sesuai ukuran asli
         canvas = np.zeros_like(color)
 
         # Menggambar objek kontur pada gambar kosong
-        cv.drawContours(canvas, [c], 0, (255, 255, 255), -1)
+        cv.drawContours(canvas, [hull], 0, (255, 255, 255), -1)
 
         # Melakukan masking
         masked = cv.bitwise_and(color, canvas)

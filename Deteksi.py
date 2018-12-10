@@ -4,8 +4,8 @@ from Citra import Citra
 import cv2 as cv
 
 # cap = cv.VideoCapture('http://192.168.13.7:8080/video')
-cap = cv.VideoCapture('data/data mentah/VID_20181126_174054.mp4')
-mlp = Mlp('hasil learning/model92.1875.json', 'hasil learning/model92.1875.h5', 'categorical_crossentropy', 'sgd')
+cap = cv.VideoCapture('http://192.168.13.7:8080/video')
+mlp = Mlp('hasil learning/model 98.4375.json', 'hasil learning/model 98.4375.h5', 'categorical_crossentropy', 'sgd')
 mlp.outputClass = ['mentah', '2', '3', 'matang']
     
 while(True):

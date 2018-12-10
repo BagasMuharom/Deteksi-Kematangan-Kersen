@@ -27,6 +27,6 @@ class Mlp:
     def predict(self, data):
         predicted = self.model.predict(numpy.array([data]))
 
-        return self.outputClass[numpy.argmax(predicted[0])]
+        return self.outputClass[numpy.argmax(predicted[0])] + ' ' + str(predicted[0, numpy.argmax(predicted[0])] * 100) + ' %'
 
     
