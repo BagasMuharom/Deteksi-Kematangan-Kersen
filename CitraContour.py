@@ -20,6 +20,8 @@ class CitraContour:
     classify = False
 
     classifier = None
+    
+    classifierMethod = 'nn'
 
     croppedResize = (0, 0)
 
@@ -82,13 +84,11 @@ class CitraContour:
         # Mengetahui lokasi kontur
         x,y,w,h = cv.boundingRect(contour)
 
-        test = self.getHistogram(image)
-
         # Melakukan klasifikasi
-        output = self.classifier.predict(test)
+        output = self.classifier.predict(image)
 
         # Menulis hasil klasifikasi
-        cv.putText(self.labeled, "#{}".format(output), (int(x) - 10, int(y)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+        cv.putText(self.labeled, "#{}".format(output), (int(x) - 10, int(y)), cv.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 255), 0)
 
     def getHistogram(self, image):
         colors = ('r','g','b')

@@ -1,12 +1,14 @@
 import matplotlib.pyplot as plt
-from Mlp import Mlp
+from CNNModel import CNNModel
+from NNModel import NNModel
 from Citra import Citra
 import cv2 as cv
 
-# cap = cv.VideoCapture('http://192.168.13.7:8080/video')
-cap = cv.VideoCapture('http://192.168.13.7:8080/video')
-mlp = Mlp('hasil learning/model 98.4375.json', 'hasil learning/model 98.4375.h5', 'categorical_crossentropy', 'sgd')
-mlp.outputClass = ['mentah', '2', '3', 'matang']
+cap = cv.VideoCapture('data/data mentah/baru/video/2.3gp')
+# cap = cv.VideoCapture('http://10.244.137.150:8080/video')
+model = CNNModel('hasil learning/model CNN 99.0625.h5', 'categorical_crossentropy', 'sgd')
+# model = NNModel('hasil learning/Model NN 94.375.h5', 'categorical_crossentropy', 'sgd')
+model.outputClass = ['mentah', 'setang', 'hampir', 'matang']
     
 while(True):
     ret, frame = cap.read()
@@ -16,12 +18,13 @@ while(True):
         continue
 
     citra = Citra(frame)
-    citra.resize((750, 500))
+    citra.resize((768, 576))
     citra.toGray()
     citra.toBinaryInv(150, 255)
-    cc = citra.getContour(9000, 50000)
+    cc = citra.getContour(2000, 50000)
     cc.classify = True
-    cc.classifier = mlp
+    cc.classifier = model
+
     cc.croppedResize = (128, 128)
     cc.findContour()
     cv.imshow('Hasil', cc.labeled)
